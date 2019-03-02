@@ -6,6 +6,9 @@
 #include <string>
  
 using namespace std;
+
+//Headers
+int wordCount(const char * input);
  
 class WordCounter {
 public:
@@ -23,7 +26,10 @@ ostream& operator<<(ostream& st, WordCounter& wc) {
 int main() {
     const string path = "/Users/ronald/Documents/Project2HPC/serial/salida.csv";
     ifstream ip(path);
-    if(!ip.is_open()) cout << "ERROR: File open" << '\n';
+    if(!ip.is_open()) {
+        cout << "ERROR: File open" << '\n';
+        return 0;
+    }
 
     string header;
     string index;
@@ -31,37 +37,31 @@ int main() {
     string title;
     string content;
     getline(ip, header);
-    while(ip.good()) {
+    
+    //while(ip.good()) {
         getline(ip, index, '\t');
-        getline(ip, id, '\t');
-        getline(ip, title, '\t');
-        getline(ip, content, '\n');
-    }
+        getline(ip, id,     '\t');
+        getline(ip, title,  '\t');
+        getline(ip, content,'\n');
+        wordCount(content.c_str());
+    //}
+
     ip.close();
     return 0;
 }
 
-
-int wordCount(ifstream input) {
+int wordCount(const char * input) {
     map<string, WordCounter> counter;
-    const string path = "/Users/ronald/Documents/Project2HPC/serial/salida.csv";
-    input.open( path.c_str() );
     
-    if (!input) {
-        cout << "Error in opening file\n";
-        return 0;
+    char * tok = strtok((char *) input, " ");
+
+    while (tok != NULL) {
+        counter[tok]++;
+        printf ("%s\n", tok);
+        tok = strtok (NULL, " ");
     }
- 
-    string tok;
-    while (true) {
-        input >> tok;
-        if (input) {
-            counter[tok]++;
-        }
-        else break;     
-    }
- 
-    map< string, WordCounter,less<string> >::iterator it;
+    
+    /**map< string, WordCounter,less<string> >::iterator it;
  
     for ( it  = counter.begin();
           it != counter.end();
@@ -71,6 +71,6 @@ int wordCount(ifstream input) {
              << ", "
              << (*it).second
              << endl;
-    }
+    }*/
     return 0; 
 }
