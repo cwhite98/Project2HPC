@@ -92,24 +92,23 @@ int main()
 
             table[(*it).first][id] = f;
         }
+    }
+    string search = "republicans";
+    map<string, frecuency> docs = table[search];
+    map<string, frecuency, less<string> >::iterator i;
 
-        string search = "colombia";
-        map<string, frecuency> docs = table[search];
-        map<string, frecuency, less<string> >::iterator i;
-
-        for (i = docs.begin();
-             i != docs.end();
-             i++)
-        {
-            cout << (*i).first
-                 << ", "
-                 << (*i).second.frecuency
-                 << "   "
-                 << (*i).second.doc_id
-                 << "   "
-                 << (*i).second.title
-                 << endl;
-        }
+    for (i = docs.begin();
+            i != docs.end();
+            i++)
+    {
+        cout << (*i).first
+                << ", "
+                << (*i).second.frecuency
+                << "   "
+                << (*i).second.doc_id
+                << "   "
+                << (*i).second.title
+                << endl;
     }
 
     ip.close();
