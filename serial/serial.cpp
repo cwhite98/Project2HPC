@@ -84,8 +84,7 @@ int main()
         map<string, WordCounter> counter = wordCount(content.c_str());
         map<string, WordCounter, less<string> >::iterator it;
 
-        for (it = counter.begin(); it != counter.end(); it++)
-        {
+        for (it = counter.begin(); it != counter.end(); it++) {
             struct frecuency f;
             f.frecuency = (*it).second.value;
             f.doc_id = id;
@@ -98,26 +97,23 @@ int main()
     cout << "Please enter a word: " << endl;
     string search;
     cin >> search;
-    transform(search.begin(), search.end(), search.begin(), ::tolower); 
-
+    transform(search.begin(), search.end(), search.begin(), ::tolower);
 
     map<string, frecuency> docs = table[search];
     map<string, frecuency, less<string> >::iterator i;
 
     int suma=0;
 
-    for (i = docs.begin();
-            i != docs.end();
-            i++)
-    {
+    for (i = docs.begin(); i != docs.end(); i++) {
+
         suma += (*i).second.frecuency;
 
-        cout    << (*i).second.frecuency
-                << "   "
-                << (*i).second.doc_id
-                << "   "
-                << (*i).second.title
-                << endl;
+        cout << (*i).second.frecuency
+             << "   "
+             << (*i).second.doc_id
+             << "   "
+             << (*i).second.title
+             << endl;
 
     }
 
