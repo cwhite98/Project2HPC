@@ -6,3 +6,8 @@ Se realiza un preprocesamiento de los datos con python, en donde se crea un nuev
 | ------------- |:-------------:| --------:|
 |               |               |          |
 |               |               |          |
+
+Además, se eliminan las stopwords y signos de puntuación. 
+
+Se realizó el código serial de C++. 
+
