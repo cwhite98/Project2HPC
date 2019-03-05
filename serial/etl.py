@@ -1,11 +1,12 @@
 # Load the Pandas libraries with alias 'pd' 
 import pandas as pd 
 import nltk
+nltk.download('punkt')
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 nltk.download('stopwords')
-from tabulate import tabulate
-import re
+#from tabulate import tabulate
+import glob
 
 fields = ['id', 'title', 'content']
 
@@ -25,9 +26,6 @@ stop_words = set(stopwords.words('english'))
 quotation = [".", "?", "!", ",", ";", ":", "-", "_", "[", "]", "{", "}", "(", ")", "...", "\'", "\"", '“', '’', '”', "$", "%", "^", "&", "*", "-", "\\", "/", "@", "!", "—"]
 for i in quotation: stop_words.add(i)
 
-# Read data from file
-data_frame = pd.read_csv("/Users/ronald/Desktop/all-the-news/articles3.csv", skipinitialspace=True, usecols=fields)
-
 #Clean the content field
 def clean_data(s):
     word_tokens = word_tokenize(s)
@@ -39,6 +37,19 @@ def clean_data(s):
     
     return ' '.join(filtered_str)
 
-data_frame['content'].dropna(inplace=True)
-data_frame['content'] = data_frame['content'].apply(clean_data)
-data_frame.to_csv("salida2.csv", sep='\t')
+
+# Read data from file                                                          
+path = "/opt/datasets"
+allFiles = glob.glob(path + "/*.csv")
+i = 0
+for fileName in allFiles:
+    print(fileName)
+    data_frame = pd.read_csv(fileName, skipinitialspace=True, usecols=fields)
+    data_frame['content'].dropna(inplace=True)
+    data_frame['content'] = data_frame['content'].apply(clean_data)
+    i+=1
+    data_frame.to_csv(str(i) + ".csv", sep='\t')
+
+#data_frame['content'].dropna(inplace=True)
+#data_frame['content'] = data_frame['content'].apply(clean_data)
+#data_frame.to_csv("salida2.csv", sep='\t')
