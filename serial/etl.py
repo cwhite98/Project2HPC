@@ -26,7 +26,7 @@ quotation = [".", "?", "!", ",", ";", ":", "-", "_", "[", "]", "{", "}", "(", ")
 for i in quotation: stop_words.add(i)
 
 # Read data from file
-data_frame = pd.read_csv("input.csv", skipinitialspace=True, usecols=fields)
+data_frame = pd.read_csv("/Users/ronald/Desktop/all-the-news/articles3.csv", skipinitialspace=True, usecols=fields)
 
 #Clean the content field
 def clean_data(s):
@@ -39,6 +39,6 @@ def clean_data(s):
     
     return ' '.join(filtered_str)
 
-
+data_frame['content'].dropna(inplace=True)
 data_frame['content'] = data_frame['content'].apply(clean_data)
-data_frame.to_csv("salida.csv", sep='\t')
+data_frame.to_csv("salida2.csv", sep='\t')
