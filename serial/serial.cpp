@@ -58,7 +58,7 @@ map<string, WordCounter> wordCount(const char *input)
 
 int main()
 {
-    const string path = "/Users/ronald/Documents/Project2HPC/serial/salida.csv";
+    const string path = "/Users/camilawhite/Documents/Universidad/Semestre7/TopicosTelematica/apps/Project2HPC/serial/1.csv";
     ifstream ip(path);
     if (!ip.is_open())
     {
