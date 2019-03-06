@@ -1,10 +1,11 @@
 #include <iostream>
 #include <fstream>
-
+#include <string.h>
 #include <sstream>
 #include <map>
 #include <string>
 #include <cctype>
+#include <algorithm>
 
 using namespace std;
 
@@ -58,7 +59,7 @@ map<string, WordCounter> wordCount(const char *input)
 
 int main()
 {
-    const string path = "/Users/camilawhite/Documents/Universidad/Semestre7/TopicosTelematica/apps/Project2HPC/serial/1.csv";
+    const string path = "/home/amonto69/Project2HPC/serial/1.csv";
     ifstream ip(path);
     if (!ip.is_open())
     {
