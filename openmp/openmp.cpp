@@ -6,7 +6,6 @@
 #include <string>
 #include <cctype>
 #include <algorithm>
-#include <omp.h>
 #include <cstdio>
 
 using namespace std;
@@ -64,13 +63,13 @@ int run(const string path) {
         cout << "ERROR: File open" << '\n';
         return 0;
     }
+
     string unused;
     while (getline(ip,unused)) {                                                                                                                 
-
       ++numLines;                                                                                                                                
+    }    
 
-    }     
- 
+    ip.clear();
     ip.seekg(0,ios::beg);
    
     string header;
@@ -82,9 +81,7 @@ int run(const string path) {
     //map<string, map<string, frecuency>> table;
     
     cout << numLines << endl;
-   for(int i = 1; i<numLines;i++)
-  
-{     
+    for(int i = 1; i<numLines;i++) {     
         getline(ip, index, '\t');
         getline(ip, id, '\t');
         getline(ip, title, '\t');
@@ -101,7 +98,6 @@ int run(const string path) {
 
             table[(*it).first][id] = f;
 	    }   
-
 
     }
     ip.close();
