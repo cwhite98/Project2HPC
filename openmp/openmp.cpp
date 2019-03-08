@@ -7,6 +7,7 @@
 #include <cctype>
 #include <algorithm>
 #include <cstdio>
+#include <omp.h>
 
 using namespace std;
 
@@ -73,19 +74,25 @@ int run(const string path) {
     ip.seekg(0,ios::beg);
    
     string header;
+    getline(ip, header);
+
+#pragma omp parallel 
+{
     string index;
     string id;
     string title;
     string content;
-    getline(ip, header);
     //map<string, map<string, frecuency>> table;
     
-    cout << numLines << endl;
-    for(int i = 1; i<numLines;i++) {     
-        getline(ip, index, '\t');
-        getline(ip, id, '\t');
-        getline(ip, title, '\t');
-        getline(ip, content, '\n');
+    //for(int i = 1; i<numLines;i++) {     
+    while (ip.good()) {
+        #pragma omp critical
+        {
+            getline(ip, index, '\t');
+            getline(ip, id, '\t');
+            getline(ip, title, '\t');
+            getline(ip, content, '\n');
+        }
 
         map<string, WordCounter> counter = wordCount(content.c_str());
         map<string, WordCounter, less<string> >::iterator it;
@@ -95,11 +102,15 @@ int run(const string path) {
             f.frecuency = (*it).second.value;
             f.doc_id = id;
             f.title = title;
-
-            table[(*it).first][id] = f;
+            
+            #pragma omp critical
+            {
+                table[(*it).first][id] = f;
+            } 
 	    }   
 
     }
+}
     ip.close();
     return 0;
 }
