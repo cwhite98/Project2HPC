@@ -17,4 +17,5 @@ Se realizó el código serial de C++, compuesto por:
 
 
 Metodología PCAM
-
+![](./fotos/todo.jpg)
+![](./fotos/mapeo.jpg)
