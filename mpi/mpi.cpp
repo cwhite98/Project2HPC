@@ -8,6 +8,7 @@
 #include <cctype>
 #include <algorithm>
 #include <cstdio>
+#include <stdio.h>
 #include "mpi.h"
 
 using namespace std;
@@ -152,6 +153,25 @@ int main(int argc, char *argv[]) {
   MPI_Get_processor_name(name, &nameLen);
   MPI_Comm_size(comm, &size);
   cout << "Hello world from rank" << rank << "running on" << name << endl;
+  
+  MPI_Status info;                                                                                                                                  
+  int msgLen = 256;                                                                                                                                 
+  int receiver = 1;                                                                                                                                 
+  int sender = 0;                                                                                                                                   
+  int tag = 0;                                                                                                                                      
+  //Send and Receive                                                                                                                                
+  if(rank == 0){                                                                                                                                    
+    char outMsg[msgLen];                                                                                                                            
+    strcpy(outMsg, "Hi There!");                                                                                                                    
+    MPI_Send(&outMsg, msgLen, MPI_CHAR, receiver, tag, MPI_COMM_WORLD);                                                                             
+  } else if(rank == 1) {                                                                                                                            
+    char inMsg[msgLen];                                                                                                                             
+   MPI_Recv(&inMsg, msgLen, MPI_CHAR, sender, tag, MPI_COMM_WORLD, &info);                                                                          
+    cout << "Received message with tag " << tag << ": " << inMsg << endl;                                                                           
+  }
+ 
+
+
   char* files[3];  
   string file0 = "1.csv";                                                                                                                           
   string file1 = "2.csv";                                                                                                                           
@@ -177,6 +197,7 @@ if (rank==0) {
    //int a = 1;
    //MPI_Scatter(files,a,MPI_CHAR,files,a,MPI_CHAR,0,comm); 
   }
+
  if (rank==0){
       run(files[0]);
     } else if (rank==1) {
@@ -184,6 +205,7 @@ if (rank==0) {
     } else if (rank==2) {
       run(files[2]);
     }
+
     if(rank==0){
 	read();
     }
