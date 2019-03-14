@@ -124,70 +124,78 @@ int run(const string path) {
 }
 
 int read(string search) {
-  map<string, frecuency> docs = table0[search];
+  map<string, frecuency> docs;
+  if(range == 0) {
+    cout << "RANK 0" << endl;
+    docs = table0[search];
+  } else if(range == 1) {
+    cout << "RANK 1" <<endl;
+    docs = table1[search];
+  } else if(range == 2) {
+    cout << "RANK 2" <<endl;
+    docs = table2[search];
+  }
   map<string, frecuency, less<string> >::iterator i;
 
   int suma = 0;
 
   for (i = docs.begin(); i != docs.end(); i++) {
 
-  suma += (*i).second.frecuency;
+    suma += (*i).second.frecuency;
 
-  /*  cout << (*i).second.frecuency
-           << "   "
-           << (*i).second.doc_id
-           << "   "
-           << (*i).second.title
-           << endl;
+    /*  cout << (*i).second.frecuency
+	     << "   "
+             << (*i).second.doc_id
+             << "   "
+             << (*i).second.title
+             << endl;
     */
-}
-
-        cout << "The word " << search << " is " << suma << " times in all news" << endl;
-        cout << "Please enter a word to search: "; 
-    return 0;
+  }
+  
+  cout << "The word " << search << " is " << suma << " times in all news" << endl;
+  return 0;
 }
 
 int main(int argc, char *argv[]) {
-
   MPI_Init(&argc,&argv);
-  int rank, size, nameLen;
+  int size, nameLen;
   char name[MPI_MAX_PROCESSOR_NAME];
   MPI_Comm comm = MPI_COMM_WORLD;
-  MPI_Comm_rank(comm, &rank);
+  MPI_Comm_rank(comm, &range);
   MPI_Get_processor_name(name, &nameLen);
   MPI_Comm_size(comm, &size);
   MPI_Status status;
-  cout << "Hello world from rank" << rank << "running on" << name << endl;
+  cout << "Hello world from rank" << range << "running on" << name << endl;
   
   char* files[3];  
-  string file0 = "1.csv";                                                                                                    
+  string file0 = "1.csv";                                                        
   string file1 = "2.csv";                                                         
   string file2 = "3.csv";
   files[0]=(char*)file0.c_str();                                                                                             
   files[1]=(char*)file1.c_str();                                                                                                 
   files[2]=(char*)file2.c_str();
 
-  if (rank==0) {
+  if (range == 0) {
     cout << "MPI World Size = " << size << "processes" << endl;
     cout << "holi" << endl;
   }
 
-  if (rank==0){
+  if (range == 0){
     run(files[0]);
-  } else if (rank==1) {
+  } else if (range == 1) {
     run(files[1]);
-  } else if (rank==2) {
+  } else if (range == 2) {
     run(files[2]);
   } 
   
   int len = 256;
   bool work = true;
   while(work) {
-    if(rank==0) { 
+    if(range == 0) { 
       string search;
       char word[search.length() + 1];
       cout << "Please enter a word to search: ";
-      while(cin >> search) {
+      while(cin >> search) { 
 	if(search == "/") {
 	  work = false;
 	  break;
@@ -197,20 +205,21 @@ int main(int argc, char *argv[]) {
 	MPI_Send(&word, len, MPI_CHAR, 1, 0, comm);
 	MPI_Send(&word, len, MPI_CHAR, 2, 0, comm);
 	read(search);
+	cout << "Please enter a word to search: ";
       }
-    } else if (rank == 1) {
+    } else if (range == 1) {
       char inMsg[len];
       MPI_Recv(&inMsg, len, MPI_CHAR, 0, 0, comm, &status);
       //cout << "EL MENSAJE QUE LLEGO A 1 ES: " << inMsg << endl;
       string search(inMsg);
       read(search);
-    } else if(rank == 2) {
+    } else if(range == 2) {
       char inMsg[len];
       MPI_Recv(&inMsg, len, MPI_CHAR, 0, 0, comm, &status);
       //cout << "EL MENSAJE QUE LLEGO A 2 ES: " << inMsg << endl;
       string search(inMsg);
       read(search);
-    }
+    }  
   }
   MPI_Finalize();
   return 0;
