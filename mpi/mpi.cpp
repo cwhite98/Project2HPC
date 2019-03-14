@@ -10,6 +10,7 @@
 #include <cstdio>
 #include <stdio.h>
 #include "mpi.h"
+#include <omp.h>
 
 using namespace std;
 
@@ -21,7 +22,6 @@ class WordCounter {
     void operator++(int) { value++; }
 };
 
-
 typedef struct frecuency {
     int frecuency;
     string doc_id;
@@ -32,19 +32,21 @@ ostream &operator<<(ostream &st, WordCounter &wc) {
     return st << wc.value;
 }
 
-map<string, map<string, frecuency> > table;
+map<string, map<string, frecuency> > table0;
+map<string, map<string, frecuency> > table1;
+map<string, map<string, frecuency> > table2;
 
-int numLines = 0;
+int range;
 
 map<string, WordCounter> wordCount(const char *input) {
     map<string, WordCounter> counter;
 
-    char *tok = strtok((char *)input, " ");
+    char* stateptr;
+    char *tok = strtok_r((char *)input, " ", &stateptr);
 
     while (tok != NULL) {
-        counter[tok]++;
-        //printf("%s\n", tok);
-        tok = strtok(NULL, " ");
+      counter[tok]++;               
+      tok = strtok_r(NULL, " ", &stateptr);
     }
 
     /**map< string, WordCounter,less<string> >::iterator it;
@@ -59,7 +61,6 @@ map<string, WordCounter> wordCount(const char *input) {
 }
 
 int run(const string path) {
-    //const string path = "/Users/camilawhite/Documents/Universidad/Semestre7/TopicosTelematica/apps/Project2HPC/serialersidad/
     cout << path << endl;
     ifstream ip(path);
     if (!ip.is_open()) {
@@ -67,31 +68,28 @@ int run(const string path) {
         return 0;
     }
 
-    string unused;
-    while (getline(ip,unused)) {                                                                                                                 
-      ++numLines;                                                                                                                                
-    }    
-
-    ip.clear();
-    ip.seekg(0,ios::beg);
-   
     string header;
     getline(ip, header);
-
-    string index;
-    string id;
-    string title;
-    string content;
+    #pragma omp parallel
+    {
+    string index =   "";
+    string id =      "";
+    string title =   "";
+    string content = "";
+    
     //map<string, map<string, frecuency>> table;
     
     //for(int i = 1; i<numLines;i++) {     
     while (ip.good()) {
-            getline(ip, index, '\t');
-            getline(ip, id, '\t');
-            getline(ip, title, '\t');
-            getline(ip, content, '\n');
-        
-
+      
+        #pragma omp critical
+        {
+	  getline(ip, index,   '\t');
+	  getline(ip, id,      '\t');
+	  getline(ip, title,   '\t');
+	  getline(ip, content, '\n');
+	}
+      
         map<string, WordCounter> counter = wordCount(content.c_str());
         map<string, WordCounter, less<string> >::iterator it;
 
@@ -101,45 +99,51 @@ int run(const string path) {
             f.doc_id = id;
             f.title = title;
             
-                table[(*it).first][id] = f;
-             
-	    }   
-
+            if(range == 0){
+	      #pragma omp critical
+	      { 
+                table0[(*it).first][id] = f;
+              }
+            }else if(range == 1){
+	      #pragma omp critical
+	      { 
+                table1[(*it).first][id] = f;
+              }
+	    }else if(range == 2){
+	      #pragma omp critical
+	      {
+		table2[(*it).first][id] = f;
+	      }
+	    }
+	}   
+    }
     
 }
     ip.close();
     return 0;
 }
 
-int read() {
-    string search;
-    cout << "Please enter a word to search: ";
-    while (cin >> search) {
-        if (search == "/")
-            break;
-        transform(search.begin(), search.end(), search.begin(), ::tolower);
+int read(string search) {
+  map<string, frecuency> docs = table0[search];
+  map<string, frecuency, less<string> >::iterator i;
 
-        map<string, frecuency> docs = table[search];
-        map<string, frecuency, less<string> >::iterator i;
+  int suma = 0;
 
-        int suma = 0;
+  for (i = docs.begin(); i != docs.end(); i++) {
 
-        for (i = docs.begin(); i != docs.end(); i++) {
+  suma += (*i).second.frecuency;
 
-            suma += (*i).second.frecuency;
-
-	    /*  cout << (*i).second.frecuency
-                 << "   "
-                 << (*i).second.doc_id
-                 << "   "
-                 << (*i).second.title
-                 << endl;
-	    */
-        }
+  /*  cout << (*i).second.frecuency
+           << "   "
+           << (*i).second.doc_id
+           << "   "
+           << (*i).second.title
+           << endl;
+    */
+}
 
         cout << "The word " << search << " is " << suma << " times in all news" << endl;
-        cout << "Please enter a word to search: ";
-    }
+        cout << "Please enter a word to search: "; 
     return 0;
 }
 
@@ -152,70 +156,62 @@ int main(int argc, char *argv[]) {
   MPI_Comm_rank(comm, &rank);
   MPI_Get_processor_name(name, &nameLen);
   MPI_Comm_size(comm, &size);
+  MPI_Status status;
   cout << "Hello world from rank" << rank << "running on" << name << endl;
   
-  MPI_Status info;                                                                                                                                  
-  int msgLen = 256;                                                                                                                                 
-  int receiver = 1;                                                                                                                                 
-  int sender = 0;                                                                                                                                   
-  int tag = 0;                                                                                                                                      
-  //Send and Receive                                                                                                                                
-  if(rank == 0){                                                                                                                                    
-    char outMsg[msgLen];                                                                                                                            
-    strcpy(outMsg, "Hi There!");                                                                                                                    
-    MPI_Send(&outMsg, msgLen, MPI_CHAR, receiver, tag, MPI_COMM_WORLD);                                                                             
-  } else if(rank == 1) {                                                                                                                            
-    char inMsg[msgLen];                                                                                                                             
-   MPI_Recv(&inMsg, msgLen, MPI_CHAR, sender, tag, MPI_COMM_WORLD, &info);                                                                          
-    cout << "Received message with tag " << tag << ": " << inMsg << endl;                                                                           
-  }
- 
-
-
   char* files[3];  
-  string file0 = "1.csv";                                                                                                                           
-  string file1 = "2.csv";                                                                                                                           
+  string file0 = "1.csv";                                                                                                    
+  string file1 = "2.csv";                                                         
   string file2 = "3.csv";
-  files[0]=(char*)file0.c_str();                                                                                                                    
-  files[1]=(char*)file1.c_str();                                                                                                                    
+  files[0]=(char*)file0.c_str();                                                                                             
+  files[1]=(char*)file1.c_str();                                                                                                 
   files[2]=(char*)file2.c_str();
-if (rank==0) {
+
+  if (rank==0) {
     cout << "MPI World Size = " << size << "processes" << endl;
-    //}
     cout << "holi" << endl;
-    //    const int nt = omp_get_max_threads();
-    //printf("%d",nt);
-    //    cout << endl;
-    //char* files[3];
-    // string file0 = "1.csv";
-    //string file1 = "2.csv";
-    //string file2 = "3.csv";
-   //files = {"1.csv", "2.csv", "3.csv"};
-   //files[0]=(char*)file0.c_str();
-   //files[1]=(char*)file1.c_str();
-   //files[2]=(char*)file2.c_str();
-   //int a = 1;
-   //MPI_Scatter(files,a,MPI_CHAR,files,a,MPI_CHAR,0,comm); 
   }
 
- if (rank==0){
-      run(files[0]);
-    } else if (rank==1) {
-      run(files[1]);
-    } else if (rank==2) {
-      run(files[2]);
+  if (rank==0){
+    run(files[0]);
+  } else if (rank==1) {
+    run(files[1]);
+  } else if (rank==2) {
+    run(files[2]);
+  } 
+  
+  int len = 256;
+  bool work = true;
+  while(work) {
+    if(rank==0) { 
+      string search;
+      char word[search.length() + 1];
+      cout << "Please enter a word to search: ";
+      while(cin >> search) {
+	if(search == "/") {
+	  work = false;
+	  break;
+	}
+	transform(search.begin(), search.end(), search.begin(), ::tolower);
+	strcpy(word, search.c_str());
+	MPI_Send(&word, len, MPI_CHAR, 1, 0, comm);
+	MPI_Send(&word, len, MPI_CHAR, 2, 0, comm);
+	read(search);
+      }
+    } else if (rank == 1) {
+      char inMsg[len];
+      MPI_Recv(&inMsg, len, MPI_CHAR, 0, 0, comm, &status);
+      //cout << "EL MENSAJE QUE LLEGO A 1 ES: " << inMsg << endl;
+      string search(inMsg);
+      read(search);
+    } else if(rank == 2) {
+      char inMsg[len];
+      MPI_Recv(&inMsg, len, MPI_CHAR, 0, 0, comm, &status);
+      //cout << "EL MENSAJE QUE LLEGO A 2 ES: " << inMsg << endl;
+      string search(inMsg);
+      read(search);
     }
-
-    if(rank==0){
-	read();
-    }
-     MPI_Finalize();  
-     /*
-    for (int i = 0; i < 3; ++i) {
-      numLines = 0;
-      run(files[i]);
-      }*/
-
-      //read();
-    return 0;
+  }
+  MPI_Finalize();
+  return 0;
 }
