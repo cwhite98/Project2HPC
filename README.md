@@ -8,10 +8,14 @@ Camila White Romero - cwhiter@eafit.edu.co
 
 # OPTION 2 – TEXT MINING
 
-# 1. Paralel Algorithm: OpenMP
+# 1. Algoritmo Serial
+* [SERIAL](pcam.md)
 
-* [Paralel Algorithm I](openmp.md)
+# 2. Algoritmo paralelo con OpenMP
+* [OpenMP](openmp.md)
 
-# 2. PCAM
+# 3. Algoritmo paralelo con MPI (Message Passing Interface)
+* [MPI](mpi.md)
 
-* [PCAM](mpi.md)
+# 4. Metodología PCAM
+* [PCAM](pcam.md)
