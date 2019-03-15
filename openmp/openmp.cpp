@@ -108,13 +108,19 @@ int read() {
     }
     
     multimap<int, frecuency>::iterator s;
+    int j = 0;
     for(s = sorted.begin(); s != sorted.end(); s++) {
-      cout << (*s).first
-	   << "   "
-	   << (*s).second.doc_id
-	   << "   "
-	   << (*s).second.title
-	   << endl;
+      if(j < 10) {
+	cout << (*s).first
+	     << "   "
+	     << (*s).second.doc_id
+	     << "   "
+	     << (*s).second.title
+	     << endl;
+	j++;
+      } else {
+	break;
+      }
     }
     cout << "The word " << search << " is " << suma << " times in all news" << endl;
     cout << "Please enter a word to search: ";
