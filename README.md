@@ -9,7 +9,7 @@ Camila White Romero - cwhiter@eafit.edu.co
 # OPTION 2 – TEXT MINING
 
 # 1. Algoritmo Serial
-* [SERIAL](pcam.md)
+* [SERIAL](serial.md)
 
 # 2. Algoritmo paralelo con OpenMP
 * [OpenMP](openmp.md)
