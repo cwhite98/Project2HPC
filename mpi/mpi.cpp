@@ -138,20 +138,26 @@ int read(string search) {
   map<string, frecuency, less<string> >::iterator i;
 
   int suma = 0;
-
+  multimap<int, frecuency, greater<int> > sorted;
   for (i = docs.begin(); i != docs.end(); i++) {
-
+    sorted.insert(pair<int, frecuency>((*i).second.frecuency, (*i).second));
     suma += (*i).second.frecuency;
-
-    /*  cout << (*i).second.frecuency
+    /*cout << (*i).second.frecuency
 	     << "   "
              << (*i).second.doc_id
              << "   "
              << (*i).second.title
-             << endl;
-    */
+             << endl;*/
   }
-  
+  multimap<int, frecuency>::iterator s;
+  for(s = sorted.begin(); s != sorted.end(); s++) {
+    cout << (*s).first                                                    
+      << "   "                                                                  
+      << (*s).second.doc_id                                                     
+      << "   "                                                                  
+      << (*s).second.title                                                      
+      << endl;
+  }
   cout << "The word " << search << " is " << suma << " times in all news" << endl;
   return 0;
 }
