@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <omp.h>
-
+#include <ctime>
 using namespace std;
 
 class WordCounter {
@@ -31,8 +31,6 @@ ostream &operator<<(ostream &st, WordCounter &wc) {
 
 map<string, map<string, frecuency> > table;
 
-int numLines = 0;
-
 map<string, WordCounter> wordCount(const char *input) {
   map<string, WordCounter> counter;
   char* stateptr;
@@ -43,15 +41,6 @@ map<string, WordCounter> wordCount(const char *input) {
     //  printf("%s\n", tok);
     tok = strtok_r(NULL, " ", &stateptr);
   }
-
-  /**map< string, WordCounter,less<string> >::iterator it;
- 
-     for ( it  = counter.begin(); it != counter.end(); it++ ) {
-     cout << (*it).first
-     << ", "
-     << (*it).second
-     << endl;
-     }*/
   return counter;
 }
 
@@ -86,7 +75,7 @@ int run(const string path) {
     for (it = counter.begin(); it != counter.end(); it++) {
       struct frecuency f;
       f.frecuency = (*it).second.value;
-      f.doc_id = id;
+      //f.doc_id = id;
       f.title = title;
       #pragma omp critical
       {
@@ -105,26 +94,28 @@ int read() {
   while (cin >> search) {
     if (search == "/")
       break;
+    
     transform(search.begin(), search.end(), search.begin(), ::tolower);
-
     map<string, frecuency> docs = table[search];
     map<string, frecuency, less<string> >::iterator i;
-
     int suma = 0;
-
+    multimap<int, frecuency, greater<int> > sorted;
+    
     for (i = docs.begin(); i != docs.end(); i++) {
-
+      (*i).second.doc_id = (*i).first;
+      sorted.insert(pair<int, frecuency>((*i).second.frecuency, (*i).second));
       suma += (*i).second.frecuency;
-
-      /*  cout << (*i).second.frecuency
-	  << "   "
-	  << (*i).second.doc_id
-	  << "   "
-	  << (*i).second.title
-	  << endl;
-      */
     }
-
+    
+    multimap<int, frecuency>::iterator s;
+    for(s = sorted.begin(); s != sorted.end(); s++) {
+      cout << (*s).first
+	   << "   "
+	   << (*s).second.doc_id
+	   << "   "
+	   << (*s).second.title
+	   << endl;
+    }
     cout << "The word " << search << " is " << suma << " times in all news" << endl;
     cout << "Please enter a word to search: ";
   }
@@ -141,12 +132,14 @@ int main(int argc, char *argv[]) {
   files[0]="1.csv";
   files[1]="2.csv";
   files[2]="3.csv";
-
+  unsigned t0, t1;
+  t0 = clock();
   for (int i = 0; i < 3; ++i) {
-    numLines = 0;
     run(files[i]);
   }
-
+  t1 = clock();
+  double time = (double(t1-t0)/CLOCKS_PER_SEC);
+  cout << "Execution Time building inverted index = " << time << endl;
   read();
   return 0;
 }

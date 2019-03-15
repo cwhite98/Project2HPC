@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include "mpi.h"
 #include <omp.h>
-
+#include <ctime>
 using namespace std;
 
 class WordCounter {
@@ -185,7 +185,8 @@ int main(int argc, char *argv[]) {
     cout << "MPI World Size = " << size << "processes" << endl;
     cout << "holi" << endl;
   }
-
+  unsigned t0, t1;
+  t0 = clock();
   if (range == 0){
     run(files[0]);
   } else if (range == 1) {
@@ -193,7 +194,9 @@ int main(int argc, char *argv[]) {
   } else if (range == 2) {
     run(files[2]);
   } 
-  
+  t1 = clock();
+  double time = (double(t1-t0)/CLOCKS_PER_SEC);
+  cout << "Execution Time building inverted index = " << time << endl;
   int len = 256;
   bool work = true;
   while(work) {
