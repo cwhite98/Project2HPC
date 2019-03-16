@@ -22,4 +22,3 @@ Metodología PCAM
 
 
 ![](./fotos/PCAM.png)
-![](./fotos/PCAM_Design.png)
