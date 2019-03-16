@@ -17,10 +17,8 @@
 ### PCAM Methodology
 * [PCAM](pcam.md)
 
-### README
-Compilation process, execution and analysis of results of serial version of the algorithm and parallel version
 
-#### Steps
+### Steps
 
 A preprocessing of the data is done with python, where a new file is created with the columns:
 
@@ -40,19 +38,7 @@ Results are printed.
 
 * The parallel algorithm was made using OpenMP (OpenMP folder).
 
-#### Configuration
-
-##### Install python dependencies
-* Python 3 must be installed.
-* Must have acces to the dataset (articles#.csv)
-
-```
-$ pip3 install pandas nltk
-```
-
-#### Serial version of the algorithm
-
-##### Pre-processing
+#### Pre-processing
 
 Before beginning with the implementation of the serial algorithm it was decided to make a data cleaning process, for ease, making use of the Python programming language. In this pre-processing stage, the following is modified to the dataset:
 
@@ -69,12 +55,15 @@ Before beginning with the implementation of the serial algorithm it was decided 
 
 [Pre-processing](serial/etl.py)
 
-##### Serial Algorithm
+To run this file, follow the next steps.
+* Python3 must be installed.
+* Must have acces to the dataset (articles#.csv)
+* Install nltk for Python3
+```
+$ pip3 install pandas nltk
+```
+
+#### Serial Algorithm
 [Serial Algorithm](serial/serial.cpp)
 
 For the implementation of the serial algorithm we followed the suggested strategy of putting together an inverted index with all the news in which each word appears. This part of the processing is developed in batch and it is where the majority of resources and processing time are spent.
-
-### Compile commands and connect to DCA
-
-#### Process Datasets
-
