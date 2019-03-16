@@ -258,12 +258,15 @@ int main(int argc, char *argv[]) {
     if (range == 0) {
       string search;
       char word[search.length() + 1];
-      cout << "Please enter a word to search: ";
+      cout << "Please enter a word to search (press / to exit): ";
       while (cin >> search) {
         if (search == "/") {
           work = false;
-          break;
-        }
+	  strcpy(word, search.c_str());
+	  MPI_Send(&word, len, MPI_CHAR, 1, 0, comm);
+	  MPI_Send(&word, len, MPI_CHAR, 2, 0, comm);
+	  break;
+	}
 	transform(search.begin(), search.end(), search.begin(), ::tolower);
         strcpy(word, search.c_str());
         MPI_Send(&word, len, MPI_CHAR, 1, 0, comm);
@@ -328,27 +331,37 @@ int main(int argc, char *argv[]) {
         cout << "The word " << search << " is " << sumaTotal << " times in all news" << endl;
 	sumaTotal = 0;
 	// Clean maps
-	sorted0.erase(sorted0.begin(), sorted0.end());
-	sorted1.erase(sorted1.begin(), sorted1.end());
-	sorted2.erase(sorted2.begin(), sorted2.end());
-	table.erase(table.begin(), table.end());
-	
-	cout << "Please enter a word to search: ";
+	//	sorted0.erase(sorted0.begin(), sorted0.end());
+	//sorted1.erase(sorted1.begin(), sorted1.end());
+	//sorted2.erase(sorted2.begin(), sorted2.end());
+	//table.erase(table.begin(), table.end());
+	sorted0.clear();
+	table.clear();
+	cout << "Please enter a word to search (press / to exit): ";
       }
+      work = false;
     }
     else if (range == 1) {
       char inMsg[len];
       MPI_Recv(&inMsg, len, MPI_CHAR, 0, 0, comm, &status);
       //cout << "EL MENSAJE QUE LLEGO A 1 ES: " << inMsg << endl;
+      if(strcmp(inMsg, "/") == 0) {
+	break;
+      }
       string search(inMsg);
       read(search);
+      sorted1.clear();
     }
     else if (range == 2) {
       char inMsg[len];
       MPI_Recv(&inMsg, len, MPI_CHAR, 0, 0, comm, &status);
       //cout << "EL MENSAJE QUE LLEGO A 2 ES: " << inMsg << endl;
+      if(strcmp(inMsg, "/") == 0) {
+	break;
+      }
       string search(inMsg);
       read(search);
+      sorted2.clear();
     }
   }
   MPI_Finalize();
