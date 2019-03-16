@@ -66,8 +66,14 @@ Before beginning with the implementation of the serial algorithm it was decided 
 | Articles2.csv | 140           | 216      |
 | Articles3.csv | 151           | 230      |
 * This table shows the weights in Megabytes of the files before and after this first stage.
+* [Pre-processing](serial/etl.py)
 
 ##### Serial Algorithm
-* [Serial Algorithm Video](serial/etl.py)
+* [Serial Algorithm](serial/serial.cpp)
 
 For the implementation of the serial algorithm we followed the suggested strategy of putting together an inverted index with all the news in which each word appears. This part of the processing is developed in batch and it is where the majority of resources and processing time are spent.
+
+### Compile commands and connect to DCA
+
+#### Process Datasets
+
