@@ -75,7 +75,7 @@ int run(const string path) {
 
 int read() {
     string search;
-    cout << "Please enter a word to search: ";
+    cout << "Please enter a word to search (press / to exit): ";
     while (cin >> search) {
         if (search == "/")
             break;
@@ -107,13 +107,13 @@ int read() {
 	  }
         }
         cout << "The word " << search << " is " << suma << " times in all news" << endl;
-        cout << "Please enter a word to search: ";
+        cout << "Please enter a word to search (press / to exit): ";
     }
     return 0;
 }
 
 int main(int argc, char *argv[]) {
-    string files[3] = {"1.csv", "2.csv", "3.csv"};
+    string files[3] = {"../datasets/1.csv", "../datasets/2.csv", "../datasets/3.csv"};
     unsigned t0, t1;
     t0 = clock();
     for (int i = 0; i < 3; i++) {

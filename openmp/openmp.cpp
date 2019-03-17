@@ -90,7 +90,7 @@ int run(const string path) {
 
 int read() {
   string search;
-  cout << "Please enter a word to search: ";
+  cout << "Please enter a word to search (press / to exit): ";
   while (cin >> search) {
     if (search == "/")
       break;
@@ -123,7 +123,7 @@ int read() {
       }
     }
     cout << "The word " << search << " is " << suma << " times in all news" << endl;
-    cout << "Please enter a word to search: ";
+    cout << "Please enter a word to search (press / to exit): ";
   }
   return 0;
 }
@@ -135,9 +135,9 @@ int main(int argc, char *argv[]) {
   //    cout << endl;
   string files[3];
   //files = {"1.csv", "2.csv", "3.csv"};
-  files[0]="1.csv";
-  files[1]="2.csv";
-  files[2]="3.csv";
+  files[0]="../datasets/1.csv";
+  files[1]="../datasets/2.csv";
+  files[2]="../datasets/3.csv";
   unsigned t0, t1;
   t0 = clock();
   for (int i = 0; i < 3; ++i) {

@@ -225,9 +225,9 @@ int main(int argc, char *argv[]) {
   cout << "Hello world from rank " << range << " running on " << name << endl;
 
   char *files[3];
-  string file0 = "1.csv";
-  string file1 = "2.csv";
-  string file2 = "3.csv";
+  string file0 = "../datasets/1.csv";
+  string file1 = "../datasets/2.csv";
+  string file2 = "../datasets/3.csv";
   files[0] = (char *)file0.c_str();
   files[1] = (char *)file1.c_str();
   files[2] = (char *)file2.c_str();
