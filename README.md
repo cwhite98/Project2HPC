@@ -67,6 +67,11 @@ $ pip3 install pandas nltk
 $ /opt/anaconda3/bin/python3 etl.py
 ```
 
+If you want to use the files already pre-processed, just run:
+```
+unzip '*.zip'
+```
+
 ### Serial Algorithm
 
 [Serial Algorithm](serial/serial.cpp)
@@ -109,7 +114,7 @@ $ ./openmp
 [OpenMP Algorithm](openmp/openmp.py)
 
 For the implementation of the parallel algorithm with MPI, we used the OpenMP algorithm as base and then started to parallelize de code. 
-We use three processes, each one open a file and process it. 
+We use three processes, each one open a file and processes it. 
 For a better explanation, go to [PCAM](pcam.md).
 
 To run this file, just follow the next steps:
@@ -125,3 +130,5 @@ $ export OMP_NUM_THREADS=3
 ```
 $ mpirun -f hosts -np 3 ./mpi
 ```
+
+### Analysis of Results
