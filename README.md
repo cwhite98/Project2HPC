@@ -132,7 +132,7 @@ $ export OMP_NUM_THREADS=3
 $ mpirun -f hosts -np 3 ./mpi
 ```
 
-### Analysis of Results
+### Performance Analysis
 
 #### Serial Version
 It is evident that the serial algorithm is very slow due to the fact that 150000 lines must be read and must find each of the word frequencies, this last part is O(n), where n is the number of words in the content column of the data sets. In addition, the words are added to a std :: map where the order is logarithmic in the size of the container.
@@ -154,11 +154,14 @@ With the images, it can be evidenced that with 3 threads the best time is obtain
 We also concluded that only an implementation using OpenMP is not efficient, because of the cost in number of processors is high in terms of such small speedup.
 
 #### OpenMP + MPI Parallel Version
-Due to the features of the dataset and the design made based on [pcam.md](PCAM methodologhy) obvious way to use MPI was to distribute the work between 3 nodes, where each one will process one input file in the OpenMP way.
-The speedup obtained is significant because each node process its file independently and no interprocess comunication is done, the local results are kept by the worker node and are totalized in the online phase.
+Due to the features of the dataset and the design made based on [PCAM methodologhy](pcam.md) the obvious way to implement MPI was to distribute the work between 3 nodes, where each one will process one input file in the OpenMP way.
+The speedup obtained is significant because each node processes its file independently and no interprocess comunication is done, the local results are kept by the worker node and are totalized only in the online phase.
 
 The parallel version with OpenMP + MPI took the following times depending on the number of threads.
 
 ![](./fotos/tablaMPI.png)
 
 ![](./fotos/MPI.png)
+
+In the table above we can see that the optimal as with OpenMP is to use 3 threads in each worker node.
+The efficiency and the speed up gets lower as the number of threads grow, making the implementation efficient with at most 5 threads. More than 5 threads, the efficiency is < 1 and the speed up is not significant.
