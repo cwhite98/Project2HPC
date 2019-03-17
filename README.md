@@ -162,4 +162,3 @@ The parallel version with OpenMP + MPI took the following times depending on the
 ![](./fotos/tablaMPI.png)
 
 ![](./fotos/MPI.png)
-
