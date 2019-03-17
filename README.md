@@ -2,7 +2,7 @@
 
 ## Team Members:
 
-* Alex Montoya Franco - amonto69@eafit.edu.co
+* Alex Montoya Franco - amonto69@eafit.edu.co - [video] (https://youtu.be/srdoAmUcjUE)
 
 * Ronald Cardona Martínez - rcardo11@eafit.edu.co
 
