@@ -127,15 +127,12 @@ int run(const string path) {
 int read(string search) {
   map<string, frecuency> docs;
   if (range == 0) {
-    cout << "RANK 0" << endl;
     docs = table0[search];
   }
   else if (range == 1) {
-    cout << "RANK 1" << endl;
     docs = table1[search];
   }
   else if (range == 2) {
-    cout << "RANK 2" << endl;
     docs = table2[search];
   }
 
@@ -173,11 +170,9 @@ int read(string search) {
         sortTitle = (*s).second.title;
         char sortedTitle[sortTitle.length() + 1];
         strcpy(sortedTitle, sortTitle.c_str());
-	//cout << "VOY A ENVIAR FREQ DE 1 ----- " << freq << endl;
         MPI_Send(&freq, 1, MPI_INT, 0, 0, comm);
         MPI_Send(&sortedId, 256, MPI_CHAR, 0, 0, comm);
         MPI_Send(&sortedTitle, 256, MPI_CHAR, 0, 0, comm);
-	//cout << "TERMINE DE ENVIAR 1 " << endl;
       }
       else {
         break;
@@ -198,11 +193,9 @@ int read(string search) {
         char sortedTitle[sortTitle.length() + 1];
         strcpy(sortedTitle, sortTitle.c_str());
 	
-	//cout << "VOY A ENVIAR FREQ DE 2 ---  " << freq << endl;
         MPI_Send(&freq, 1, MPI_INT, 0, 0, comm);
         MPI_Send(&sortedId, 256, MPI_CHAR, 0, 0, comm);
         MPI_Send(&sortedTitle, 256, MPI_CHAR, 0, 0, comm);
-	//cout << "TERMINE DE ENVIAR 2 " << endl;
       }
       else {
         break;
@@ -222,7 +215,6 @@ int main(int argc, char *argv[]) {
   MPI_Get_processor_name(name, &nameLen);
   MPI_Comm_size(comm, &size);
   MPI_Status status;
-  cout << "Hello world from rank " << range << " running on " << name << endl;
 
   char *files[3];
   string file0 = "../datasets/1.csv";
@@ -232,9 +224,6 @@ int main(int argc, char *argv[]) {
   files[1] = (char *)file1.c_str();
   files[2] = (char *)file2.c_str();
 
-  if (range == 0) {
-    cout << "MPI World Size = " << size << " processes" << endl;
-  }
   unsigned t0, t1;
   t0 = clock();
   if (range == 0) {
@@ -251,7 +240,6 @@ int main(int argc, char *argv[]) {
   cout << "Execution Time building inverted index = " << time << endl;
 
   // Wait until all processes are done.
-
   int len = 256;
   bool work = true;
   while (work) {
@@ -291,7 +279,6 @@ int main(int argc, char *argv[]) {
 	  char id[256];
 	  char title[256];
 	  MPI_Recv(&freq, 1, MPI_INT, 1, 0, comm, &status);
-	  //cout << "RECIBI FREQ 1: " << freq << endl;
 	  MPI_Recv(&id, 256, MPI_CHAR, 1, 0, comm, &status);
 	  MPI_Recv(&title, 256, MPI_CHAR, 1, 0, comm, &status);
 	  struct frecuency f;
@@ -328,13 +315,9 @@ int main(int argc, char *argv[]) {
 	  } else break;
 	  j++;
 	}
-        cout << "The word " << search << " is " << sumaTotal << " times in all news" << endl;
+  cout << "The word " << search << " is " << sumaTotal << " times in all news" << endl;
 	sumaTotal = 0;
 	// Clean maps
-	//	sorted0.erase(sorted0.begin(), sorted0.end());
-	//sorted1.erase(sorted1.begin(), sorted1.end());
-	//sorted2.erase(sorted2.begin(), sorted2.end());
-	//table.erase(table.begin(), table.end());
 	sorted0.clear();
 	table.clear();
 	cout << "Please enter a word to search (press / to exit): ";
@@ -344,7 +327,6 @@ int main(int argc, char *argv[]) {
     else if (range == 1) {
       char inMsg[len];
       MPI_Recv(&inMsg, len, MPI_CHAR, 0, 0, comm, &status);
-      //cout << "EL MENSAJE QUE LLEGO A 1 ES: " << inMsg << endl;
       if(strcmp(inMsg, "/") == 0) {
 	break;
       }
@@ -355,7 +337,6 @@ int main(int argc, char *argv[]) {
     else if (range == 2) {
       char inMsg[len];
       MPI_Recv(&inMsg, len, MPI_CHAR, 0, 0, comm, &status);
-      //cout << "EL MENSAJE QUE LLEGO A 2 ES: " << inMsg << endl;
       if(strcmp(inMsg, "/") == 0) {
 	break;
       }
