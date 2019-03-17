@@ -94,7 +94,7 @@ $ ./serial
 [OpenMP Algorithm](openmp/openmp.py)
 
 For the implementation of the parallel algorithm with OpenMP, we used the serial algorithm as base and then started to parallelize de code. 
-We used #pragma omp parallel to create the threads and #pragma omp critical to prevent different threads accesing the same region at a time. 
+We used #pragma omp parallel to create the threads and #pragma omp critical to prevent different threads accesing the same region at a time. A complete specification of openmp algorithm can be found [here](openmp.md)
 
 To run this file, just follow the next steps:
 * Compile.
