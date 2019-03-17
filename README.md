@@ -133,3 +133,14 @@ $ mpirun -f hosts -np 3 ./mpi
 ```
 
 ### Analysis of Results
+
+#### Serial Version
+It is evident that the serial algorithm is very slow due to the fact that 150000 lines must be read and must find each of the word frequencies, this last part is O(n), where n is the number of words in the content column of the data sets. In addition, the words are added to a std :: map where the order is logarithmic in the size of the container.
+
+The serial algorithm took 227.649 seconds to create de inverted index. 
+
+#### OpenMP Parallel Version
+
+The parallel version with OpenMP took the following times depending on the number of threads. 
+![](./fotos/tablaOpenMP.png)
+![](./fotos/OPENMP.png)
