@@ -69,6 +69,7 @@ $ /opt/anaconda3/bin/python3 etl.py
 
 If you want to use the files already pre-processed, just run:
 ```
+cd datasets
 unzip '*.zip'
 ```
 
