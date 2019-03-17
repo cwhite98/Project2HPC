@@ -141,7 +141,7 @@ The serial algorithm took 227.649 seconds to create de inverted index.
 
 #### OpenMP Parallel Version
 
-Decomposing the serial algorithm into smaller tasks is very clear here, we can process each line of the input in parallel but we encounter 2 barriers. 1. getting the line to process and 2.  adding word-frecuencies to the map (see openmp). This is why we needed to implement 2 critical regions and the speedup of the openmp algorithm is lower than expected.
+Decomposing the serial algorithm into smaller tasks is very clear here, we can process each line of the input in parallel but we encounter 2 barriers. 1. getting the line to process and 2.  adding word-frecuencies to the map (see [OpenMp](openmp.md)). This is why we needed to implement 2 critical regions and the speedup of the openmp algorithm is lower than expected.
 
 The parallel version with OpenMP took the following times depending on the number of threads. 
 
@@ -154,6 +154,8 @@ With the images, it can be evidenced that with 3 threads the best time is obtain
 We also concluded that only an implementation using OpenMP is not efficient, because of the cost in number of processors is high in terms of such small speedup.
 
 #### OpenMP + MPI Parallel Version
+Due to the features of the dataset and the design made based on [pcam.md](PCAM methodologhy) obvious way to use MPI was to distribute the work between 3 nodes, where each one will process one input file in the OpenMP way.
+The speedup obtained is significant because each node process its file independently and no interprocess comunication is done, the local results are kept by the worker node and are totalized in the online phase.
 
 The parallel version with OpenMP + MPI took the following times depending on the number of threads. 
 
