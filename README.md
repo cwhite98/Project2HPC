@@ -36,9 +36,11 @@ The serial C ++ code was made, composed of:
 * An *online* step where the user enter a word and it is searched in the map created in the *batch* step.
 Results are printed.
 
-* The parallel algorithm was made using OpenMP (OpenMP folder).
+* The parallel algorithms were made using OpenMP (OpenMP folder) and MPI (MPI folder).
 
-#### Pre-processing
+### Pre-processing
+
+[Pre-processing](serial/etl.py)
 
 Before beginning with the implementation of the serial algorithm it was decided to make a data cleaning process, for ease, making use of the Python programming language. In this pre-processing stage, the following is modified to the dataset:
 
@@ -53,8 +55,6 @@ Before beginning with the implementation of the serial algorithm it was decided 
 | Articles3.csv | 151           | 230      |
 * This table shows the weights in Megabytes of the files before and after this first stage.
 
-[Pre-processing](serial/etl.py)
-
 To run this file, follow the next steps.
 * Python3 must be installed.
 * Must have acces to the dataset (articles#.csv)
@@ -67,7 +67,8 @@ $ pip3 install pandas nltk
 $ /opt/anaconda3/bin/python3 etl.py
 ```
 
-#### Serial Algorithm
+### Serial Algorithm
+
 [Serial Algorithm](serial/serial.cpp)
 
 For the implementation of the serial algorithm we followed the suggested strategy of putting together an inverted index with all the news in which each word appears. This part of the processing is developed in batch and it is where the majority of resources and processing time are spent.
@@ -82,7 +83,10 @@ $ g++ serial.cpp -o serial -std=c++11
 $ ./serial
 ```
 
-#### OpenMP Algorithm
+### OpenMP Algorithm
+
+[OpenMP Algorithm](openmp/openmp.py)
+
 
 
 
