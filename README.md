@@ -149,4 +149,15 @@ The parallel version with OpenMP took the following times depending on the numbe
 
 ![](./fotos/OPENMP.png)
 
-With the images, it can be evidenced that with 3 threads the best time is obtained.
+With the images, it can be evidenced that with 3 threads the best time is obtained. Therefore, the higher the number of threads, the lower the openmp implementation gets.
+
+We also concluded that only an implementation using OpenMP is not efficient, because of the cost in number of processors is high in terms of such small speedup.
+
+#### OpenMP + MPI Parallel Version
+
+The parallel version with OpenMP + MPI took the following times depending on the number of threads. 
+
+![](./fotos/tablaMPI.png)
+
+![](./fotos/MPI.png)
+
