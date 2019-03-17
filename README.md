@@ -36,7 +36,7 @@ The serial C ++ code was made, composed of:
 * An *online* step where the user enter a word and it is searched in the map created in the *batch* step.
 Results are printed.
 
-* The parallel algorithms were made using OpenMP (OpenMP folder) and MPI (MPI folder).
+The parallel algorithms were made using OpenMP (OpenMP folder) and MPI (MPI folder).
 
 ### Pre-processing
 
@@ -87,6 +87,41 @@ $ ./serial
 
 [OpenMP Algorithm](openmp/openmp.py)
 
+For the implementation of the parallel algorithm with OpenMP, we used the serial algorithm as base and then started to parallelize de code. 
+We used #pragma omp parallel to create the threads and #pragma omp critical to prevent different threads accesing the same region at a time. 
 
+To run this file, just follow the next steps:
+* Compile.
+```
+$ g++ openmp.cpp -o openmp -std=c++11 -fopenmp
+```
+* Define the number of threads.
+```
+$ export OMP_NUM_THREADS=3
+```
+* Run the executable.
+```
+$ ./openmp
+```
 
+### MPI Algorithm
 
+[OpenMP Algorithm](openmp/openmp.py)
+
+For the implementation of the parallel algorithm with MPI, we used the OpenMP algorithm as base and then started to parallelize de code. 
+We use three processes, each one open a file and process it. 
+For a better explanation, go to [PCAM](pcam.md).
+
+To run this file, just follow the next steps:
+* Compile.
+```
+$  mpic++ mpi.cpp -o mpi -std=c++11 -fopenmp
+```
+* Define the number of threads.
+```
+$ export OMP_NUM_THREADS=3
+```
+* Run the executable.
+```
+$ mpirun -f hosts -np 3 ./mpi
+```
