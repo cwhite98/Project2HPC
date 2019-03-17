@@ -2,11 +2,11 @@
 
 ## Team Members:
 
-* Alex Montoya Franco - amonto69@eafit.edu.co - [video](https://youtu.be/srdoAmUcjUE)
+* Alex Montoya Franco - amonto69@eafit.edu.co - [VIDEO PCAM](https://youtu.be/srdoAmUcjUE)
 
-* Ronald Cardona Martínez - rcardo11@eafit.edu.co
+* Ronald Cardona Martínez - rcardo11@eafit.edu.co - [VIDEO OPENMP](https://youtu.be/C2m8ggv9cE4)
 
-* Camila White Romero - cwhiter@eafit.edu.co
+* Camila White Romero - cwhiter@eafit.edu.co - [VIDEO MPI](https://youtu.be/ssS15JVdW2c)
 
 
 ##  OPTION 2 – TEXT MINING
