@@ -58,12 +58,31 @@ Before beginning with the implementation of the serial algorithm it was decided 
 To run this file, follow the next steps.
 * Python3 must be installed.
 * Must have acces to the dataset (articles#.csv)
-* Install nltk for Python3
+* Install nltk (Natural Language Toolkit) and Pandas for Python3.
 ```
 $ pip3 install pandas nltk
+```
+* Run the file.
+```
+$ /opt/anaconda3/bin/python3 etl.py
 ```
 
 #### Serial Algorithm
 [Serial Algorithm](serial/serial.cpp)
 
 For the implementation of the serial algorithm we followed the suggested strategy of putting together an inverted index with all the news in which each word appears. This part of the processing is developed in batch and it is where the majority of resources and processing time are spent.
+
+To run this file, just follow the next steps:
+* Compile.
+```
+$ g++ serial.cpp -o serial -std=c++11
+```
+* Run the executable.
+```
+$ ./serial
+```
+
+#### OpenMP Algorithm
+
+
+
