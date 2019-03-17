@@ -157,9 +157,8 @@ We also concluded that only an implementation using OpenMP is not efficient, bec
 Due to the features of the dataset and the design made based on [pcam.md](PCAM methodologhy) obvious way to use MPI was to distribute the work between 3 nodes, where each one will process one input file in the OpenMP way.
 The speedup obtained is significant because each node process its file independently and no interprocess comunication is done, the local results are kept by the worker node and are totalized in the online phase.
 
-The parallel version with OpenMP + MPI took the following times depending on the number of threads. 
+The parallel version with OpenMP + MPI took the following times depending on the number of threads.
 
 ![](./fotos/tablaMPI.png)
 
 ![](./fotos/MPI.png)
-
